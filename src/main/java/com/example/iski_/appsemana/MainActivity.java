@@ -1,9 +1,12 @@
 package com.example.iski_.appsemana;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -31,20 +34,33 @@ public class MainActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
-                texto.setText(loginResult.getAccessToken().getUserId());
+                Intent intent = new Intent(getApplicationContext(),NavagitionActivity.class);
+                startActivity(intent);
+               // texto.setText(loginResult.getAccessToken().getUserId());
             }
 
             @Override
             public void onCancel() {
-                texto.setText("USer Cancel Request");
+                Toast.makeText(getApplicationContext(),"Cancelaste el Login",Toast.LENGTH_LONG);
+                //texto.setText("USer Cancel Request");
             }
 
             @Override
             public void onError(FacebookException error) {
-                texto.setText("Error De conexion");
+
+                Toast.makeText(getApplicationContext(),"Error Conexion",Toast.LENGTH_LONG);
+                //texto.setText("Error De conexion");
             }
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+        private boolean estalogueado(){
+
+            return AccessToken.getCurrentAccessToken() != null; // para crear un token para seguridad de la contraseña y valida si el usuario esta logueado
+        }
 }
